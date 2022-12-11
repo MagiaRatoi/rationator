@@ -172,7 +172,6 @@ app.post("/", (req, res) => {
     res.send("OK")
 })
 
-console.log(req.body)
 //create server
 app.listen(port, () => console.log(`[R.A.T] Listening at port ${port}`))
 
